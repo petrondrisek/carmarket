@@ -1,11 +1,12 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import AuthenticationCard from '@/Components/JetStream/AuthenticationCard.vue';
+import AuthenticationCardLogo from '@/Components/JetStream/AuthenticationCardLogo.vue';
+import InputError from '@/Components/Forms/InputError.vue';
+import InputLabel from '@/Components/Forms/InputLabel.vue';
+import PrimaryButton from '@/Components/Forms/PrimaryButton.vue';
+import TextInput from '@/Components/Inputs/TextInput.vue';
+import Layout from '@/Layouts/Layout.vue';
 
 defineProps({
     status: String,
@@ -21,14 +22,12 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Forgot Password" />
+    <Head title="Forgot Password"></Head>
+
+    <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight text-center">Forgot password</h2>
 
     <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
             Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
         </div>
 
@@ -59,3 +58,7 @@ const submit = () => {
         </form>
     </AuthenticationCard>
 </template>
+
+<script>
+export default { layout: Layout };
+</script>

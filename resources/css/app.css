@@ -5,3 +5,85 @@
 [x-cloak] {
     display: none;
 }
+
+* {
+  scroll-behavior: smooth
+}
+
+body {
+    @apply bg-gray-100 text-gray-900;
+}
+
+
+.dark body {
+    @apply bg-gray-900 text-white;
+}
+
+.dark #nprogress .bar {
+  @apply bg-dark_primary-600;
+}
+
+/* Google Map */
+.gm-style .gmp-draggable-marker {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Swiper */
+.mySwiper.swiper, .mySwiper2.swiper {
+  @apply w-full; 
+}
+
+.mySwiper2 .swiper-slide {
+  height: 480px;
+}
+
+.mySwiper2 {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mySwiper {
+  background: #404040;
+  @apply bg-gray-200 dark:bg-gray-800 mt-2;
+}
+
+.mySwiper .swiper-slide {
+  height: 100px;
+  @apply bg-gray-200 dark:bg-gray-700 opacity-40 hover:opacity-100 transition ease-in-out duration-300 cursor-pointer;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.mySwiper3 {
+  position: fixed !important;
+  z-index: 20 !important;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+}
+
+.mySwiper3 .swiper-slide {
+  webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}

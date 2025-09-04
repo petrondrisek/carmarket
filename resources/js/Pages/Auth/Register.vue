@@ -1,12 +1,12 @@
 <script setup>
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import Layout from '@/Layouts/Layout.vue';
+import AuthenticationCard from '@/Components/JetStream/AuthenticationCard.vue';
+import Checkbox from '@/Components/Inputs/Checkbox.vue';
+import InputError from '@/Components/Forms/InputError.vue';
+import InputLabel from '@/Components/Forms/InputLabel.vue';
+import PrimaryButton from '@/Components/Forms/PrimaryButton.vue';
+import TextInput from '@/Components/Inputs/TextInput.vue';
 
 const form = useForm({
     name: '',
@@ -24,13 +24,11 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Register" />
+    <Head title="Register"></Head>
+
+    <h2 class="font-semibold text-3xl text-gray-800 dark:text-gray-200 leading-tight text-center">Register</h2>
 
     <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
-
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="name" value="Name" />
@@ -99,7 +97,7 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Already registered?
                 </Link>
 
@@ -110,3 +108,9 @@ const submit = () => {
         </form>
     </AuthenticationCard>
 </template>
+
+<script>
+export default { 
+    layout: Layout 
+};
+</script>

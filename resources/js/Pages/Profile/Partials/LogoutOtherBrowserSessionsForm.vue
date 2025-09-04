@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
-import ActionMessage from '@/Components/ActionMessage.vue';
-import ActionSection from '@/Components/ActionSection.vue';
-import DialogModal from '@/Components/DialogModal.vue';
-import InputError from '@/Components/InputError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import ActionMessage from '@/Components/Forms/ActionMessage.vue';
+import ActionSection from '@/Components/JetStream/ActionSection.vue';
+import DialogModal from '@/Components/Modal/DialogModal.vue';
+import InputError from '@/Components/Forms/InputError.vue';
+import PrimaryButton from '@/Components/Forms/PrimaryButton.vue';
+import SecondaryButton from '@/Components/Forms/SecondaryButton.vue';
+import TextInput from '@/Components/Inputs/TextInput.vue';
 
 defineProps({
     sessions: Array,
@@ -53,7 +53,7 @@ const closeModal = () => {
         </template>
 
         <template #content>
-            <div class="max-w-xl text-sm text-gray-600">
+            <div class="max-w-xl text-sm text-gray-600 dark:text-gray-400">
                 If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
             </div>
 
@@ -71,7 +71,7 @@ const closeModal = () => {
                     </div>
 
                     <div class="ms-3">
-                        <div class="text-sm text-gray-600">
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
                             {{ session.agent.platform ? session.agent.platform : 'Unknown' }} - {{ session.agent.browser ? session.agent.browser : 'Unknown' }}
                         </div>
 

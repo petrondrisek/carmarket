@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
-import ActionMessage from '@/Components/ActionMessage.vue';
-import FormSection from '@/Components/FormSection.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import ActionMessage from '@/Components/Forms/ActionMessage.vue';
+import FormSection from '@/Components/Forms/FormSection.vue';
+import InputError from '@/Components/Forms/InputError.vue';
+import InputLabel from '@/Components/Forms/InputLabel.vue';
+import PrimaryButton from '@/Components/Forms/PrimaryButton.vue';
+import SecondaryButton from '@/Components/Forms/SecondaryButton.vue';
+import TextInput from '@/Components/Inputs/TextInput.vue';
 
 const props = defineProps({
     user: Object,
@@ -17,6 +17,9 @@ const form = useForm({
     _method: 'PUT',
     name: props.user.name,
     email: props.user.email,
+    first_name: props.user.first_name,
+    last_name: props.user.last_name,
+    phone: props.user.phone,
     photo: null,
 });
 
@@ -174,7 +177,48 @@ const clearPhotoFileInput = () => {
                         A new verification link has been sent to your email address.
                     </div>
                 </div>
+
+                <!-- First name -->
+                 <div class="col-span-6 sm:col-span-4 mt-4">
+                    <InputLabel for="first_name" value="First name" />
+                    <TextInput
+                        id="first_name"
+                        v-model="form.first_name"
+                        type="text"
+                        class="mt-1 block w-full"
+                        autocomplete="first_name"
+                    />
+                    <InputError :message="form.errors.first_name" class="mt-2" />
+                </div>
+
+                <!-- Last name -->
+                 <div class="col-span-6 sm:col-span-4 mt-4">
+                    <InputLabel for="last_name" value="Last name" />
+                    <TextInput
+                        id="last_name"
+                        v-model="form.last_name"
+                        type="text"
+                        class="mt-1 block w-full"
+                        autocomplete="last_name"
+                    />
+                    <InputError :message="form.errors.last_name" class="mt-2" />
+                </div>
+
+                <!-- Phone -->
+                 <div class="col-span-6 sm:col-span-4 mt-4">
+                    <InputLabel for="phone" value="Phone number (format: +000111222333)" />
+                    <TextInput
+                        id="phone"
+                        v-model="form.phone"
+                        type="text"
+                        class="mt-1 block w-full"
+                        autocomplete="phone"
+                        maxlength="13"
+                    />
+                    <InputError :message="form.errors.phone" class="mt-2" />
+                </div>
             </div>
+
         </template>
 
         <template #actions>
