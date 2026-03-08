@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->string('model');
             $table->string('color');
-            $table->float('locationLat', 10, 6);
-            $table->float('locationLng', 10, 6);
+            $table->float('location_lat', 10, 6);
+            $table->float('location_lng', 10, 6);
             $table->float('kilometers', 10, 2);
             $table->float('price', 10, 2);
             $table->enum('engine', ['diesel', 'gasoline', 'hybrid', 'electric', 'lpg', 'cng']);
@@ -28,7 +28,6 @@ return new class extends Migration
             $table->float('fuel_consumption', 5, 2)->nullable();
             $table->text('description');
             $table->json('other_features')->nullable();
-            $table->json('images')->nullable();
             $table->boolean('is_sold')->default(false);
             $table->timestamps();
         });

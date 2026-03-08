@@ -1,0 +1,1 @@
+export { default as CarDetailTableRow } from './CarDetailTableRow.vue';

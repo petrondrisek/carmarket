@@ -1,55 +1,104 @@
 <?php
-
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-use App\Http\Middleware\CheckBrandManagePermission;
-use App\Http\Middleware\CheckCarManagePermission;
-use App\Http\Middleware\CheckCarAuthorPermission;
-
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SearchMapController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CarController;
+use App\Http\Middleware\Brand\CheckBrandManagePermission;
+use App\Http\Middleware\Car\CheckCarManagePermission;
+use App\Http\Middleware\Car\CheckCarAuthorPermission;
 
 // Main
-Route::get('/', [DashboardController::class, 'index'])->name('app_dashboard');
-
-// Search
-Route::get('/search', [SearchMapController::class, 'index'])->name('app_search');
+Route::get(
+    '/',
+    \App\Http\Controllers\Dashboard\InertiaDashboardController::class
+)->name('app_dashboard');
 
 // Brand
 Route::middleware([
     CheckBrandManagePermission::class, 
     'auth',
 ])->group(function () {
-    Route::get('/brand/add', [BrandController::class, 'add'])->name('app_brand_add');
-    Route::post('/brand/store', [BrandController::class, 'store'])->name('app_brand_store');
-    Route::get('/brand/manage', [BrandController::class, 'list'])->name('app_brand_manage');
-    Route::get('/brand/edit/{brand}', [BrandController::class, 'edit'])->name('app_brand_edit');
-    Route::post('/brand/edit/{brand}', [BrandController::class, 'update'])->name('app_brand_save');
-    Route::delete('/brand/delete/{brand}', [BrandController::class, 'destroy'])->name('app_brand_delete');
+    Route::get(
+        '/brand/add', 
+        \App\Http\Controllers\Brand\InertiaAddBrandController::class
+    )->name('app_brand_add');
+
+    Route::post(
+        '/brand/store',
+        \App\Http\Controllers\Brand\RegisterBrandController::class
+    )->name('app_brand_store');
+
+    Route::get(
+        '/brand/manage',
+        \App\Http\Controllers\Brand\InertiaManageBrandsController::class
+    )->name('app_brand_manage');
+
+    Route::get(
+        '/brand/edit/{brand}', 
+        \App\Http\Controllers\Brand\InertiaEditBrandController::class
+    )->name('app_brand_edit');
+
+    Route::post(
+        '/brand/edit/{brand}', 
+        \App\Http\Controllers\Brand\UpdateBrandController::class
+    )->name('app_brand_save');
+
+    Route::delete(
+        '/brand/delete/{brand}', 
+        \App\Http\Controllers\Brand\DeleteBrandController::class
+    )->name('app_brand_delete');
 });
 
 // Car
-Route::get('/car/add', [CarController::class, 'add'])->name('app_car_add');
-Route::get('/car/list', [CarController::class, 'list'])->name('app_car_get');
-Route::get('/car/show/{carId}', [CarController::class, 'show'])->name('app_car_show');
-Route::post('/car/store', [CarController::class, 'store'])->name('app_car_store')->middleware('auth');
+Route::get(
+    '/car/add',
+    \App\Http\Controllers\Car\InertiaAddCarController::class
+)->name('app_car_add');
+
+Route::get(
+    '/car/list', 
+    \App\Http\Controllers\Car\InertiaFilterCarController::class
+)->name('app_car_get');
+
+Route::get(
+    '/car/show/{car}', 
+    \App\Http\Controllers\Car\InertiaShowCarController::class
+)->name('app_car_show');
+
+Route::post(
+    '/car/store', 
+    \App\Http\Controllers\Car\RegisterCarController::class
+)->name('app_car_store')->middleware('auth');
+
+Route::get(
+    '/car/search',
+    \App\Http\Controllers\Car\InertiaSearchCarController::class
+)->name('app_car_search');
 
 Route::middleware([
     CheckCarManagePermission::class, 
     'auth',
 ])->group(function () {
-    Route::get('/car/edit/{carId}', [CarController::class, 'edit'])->name('app_car_edit');
-    Route::post('/car/edit/{car}', [CarController::class, 'update'])->name('app_car_save');
-    Route::delete('/car/delete/{car}', [CarController::class, 'destroy'])->name('app_car_delete');
+    Route::get(
+        '/car/edit/{car}', 
+        \App\Http\Controllers\Car\InertiaEditCarController::class
+    )->name('app_car_edit');
+
+    Route::post(
+        '/car/edit/{car}', 
+        \App\Http\Controllers\Car\UpdateCarController::class
+    )->name('app_car_save');
+
+    Route::delete(
+        '/car/delete/{car}', 
+        \App\Http\Controllers\Car\DeleteCarController::class
+    )->name('app_car_delete');
 });
 
 Route::middleware([
     CheckCarAuthorPermission::class,
     'auth',
 ])->group(function () {
-    Route::post('/car/sold/{car}', [CarController::class, 'sold'])->name('app_car_sold');
+    Route::post(
+        '/car/sold/{car}', 
+        \App\Http\Controllers\Car\MarkAsSoldCarController::class
+    )->name('app_car_sold');
 });

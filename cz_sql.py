@@ -2,10 +2,10 @@ import os
 import pymysql
 
 mydb = pymysql.connect(
-    host="",
-    user="",
-    password="",
-    database=""
+    host="localhost",
+    user="root",
+    password="root",
+    database="carmarket"
 )
 tablename = "cities"
 

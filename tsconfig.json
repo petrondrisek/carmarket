@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "./resources/ts",
+    "outDir": "./public/build",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["vite/client", "ziggy-js", "google.maps"],
+    "paths": {
+      "@/*": ["./resources/ts/*"]
+    }
+  },
+  "exclude": ["vendor", "node_modules", "public/build"],
+  "include": [
+    "resources/ts/**/*.ts",
+    "resources/ts/**/*.d.ts",
+    "resources/ts/**/*.vue"
+  ]
+}

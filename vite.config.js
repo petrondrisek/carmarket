@@ -1,12 +1,19 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import path from 'path';
 
 export default defineConfig({
+    server: {
+        host: 'localhost',
+        port: 5173,
+        strictPort: true,
+        cors: true
+    },
     plugins: [
         laravel({
-            input: 'resources/js/app.js',
-            ssr: 'resources/js/ssr.js',
+            input: 'resources/ts/app.ts',
+            ssr: 'resources/ts/ssr.ts',
             refresh: true,
         }),
         vue({
@@ -18,4 +25,10 @@ export default defineConfig({
             },
         }),
     ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './resources/ts'),
+            'ziggy-js': path.resolve(__dirname, 'vendor/tightenco/ziggy'),
+        },
+    },
 });

@@ -84,4 +84,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function hasPermission(string $permission): bool
+    {
+        $permissions = json_decode($this->permissions, true);
+        return in_array($permission, $permissions);
+    }
 }
