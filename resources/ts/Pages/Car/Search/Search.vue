@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3';
-import { useTemplateRef } from 'vue';
 
 import Layout from '@/Layouts/Layout.vue';
 import { Map, MapCitySearch } from '@/Modules/Map';
@@ -18,16 +17,10 @@ import ActionSection from '@/Modules/JetStream/ActionSection.vue';
 import InputLabel from '@/Modules/JetStream/Forms/InputLabel.vue';
 import { PrimaryButton } from '@/Shared/Components';
 import { PageProps } from '@/Shared/Types';
-import { FiltersExtendedFree } from './types';
 import { useCarSearch } from './useCarSearch';
-import { useMapSearchSync } from './useMapSearchSync';
 
 const props = usePage<PageProps>().props;
-const mapCitySearchRef = useTemplateRef('mapCitySearchRef');
-const mapRef = useTemplateRef('mapRef');
-
-const { form, executeSearch } = useCarSearch(props.queryParams ?? {} as FiltersExtendedFree);
-useMapSearchSync(form, mapRef);
+const { form, executeSearch } = useCarSearch(props.queryParams ?? {});
 </script>
 
 <template>
@@ -43,7 +36,7 @@ useMapSearchSync(form, mapRef);
         <template #content>
             <div class="mb-2">
                 <InputLabel for="brand" value="Brand" />
-                <ChooseBrand v-model:selected-brand="form.brand" id="brand"/>
+                <ChooseBrand v-model.number="form.brand" id="brand"/>
             </div>
 
             <div class="mb-2">
@@ -87,7 +80,7 @@ useMapSearchSync(form, mapRef);
         <template #content>
             <div class="mb-2">
                 <InputLabel for="color" value="Color" />
-                <ChooseColor v-model:selected-color="form.color" name="color" />
+                <ChooseColor v-model="form.color" name="color" />
             </div>
 
             <div class="mb-2 flex gap-2">
@@ -137,27 +130,26 @@ useMapSearchSync(form, mapRef);
             </div>
 
             <RangeInput 
-                @input="() => mapRef?.updateRadius(form.radius ?? 10)" 
                 :min="5" 
                 :max="100" 
                 :step="5" 
                 stateAlign="right" 
-                v-model="form.radius" 
+                v-model.number="form.location.radius" 
                 unit="km" 
                 :breakpoints="[25, 50, 75]"
             />
 
             <MapCitySearch
-                    ref="mapCitySearchRef"
-                    @city-found="(lat: number, lng: number) => mapRef?.updatePosition(lat, lng)"
+                v-model:lat="form.location.lat"
+                v-model:lng="form.location.lng"
+                v-model:city="form.location.city"
             />
 
             <Map
-                ref="mapRef" 
-                :radius="form.radius || 10" 
-                :initial-lat="form.lat" 
-                :initial-lng="form.lng"
-                @updated-location="(city) => mapCitySearchRef?.setCityWithoutSearch(city)"
+                v-model:radius.number="form.location.radius" 
+                v-model:lat="form.location.lat" 
+                v-model:lng="form.location.lng"
+                v-model:city="form.location.city"
             />
         </template>
     </ActionSection>

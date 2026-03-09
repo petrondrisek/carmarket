@@ -14,7 +14,7 @@ final class InertiaShowCarController
 {
     public function __invoke(Car $car): Response
     {
-        $car->load(['brand', 'user', 'images.image']);
+        $car->load(['brand', 'brand.images.image', 'user', 'images.image']);
 
         return Inertia::render('Car/Show', [
             'car' => new CarResource($car)

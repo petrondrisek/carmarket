@@ -1,7 +1,7 @@
 <?php
 namespace App\Actions\Car;
 
-use Illuminate\Support\Facades\{DB, Storage};
+use Illuminate\Support\Facades\{DB, Storage, Log};
 use App\Models\{Car, Brand, User, Image, CarImage};
 use App\Dto\Car\RegisterCarDto;
 
@@ -9,6 +9,8 @@ final class RegisterCarAction
 {
     public function execute(RegisterCarDto $data, User $user): Car
     {
+        Log::info(json_encode($data));
+
         // check brand
         $brand = Brand::findOrFail($data->brandId);
         if($brand->is_active == false) {

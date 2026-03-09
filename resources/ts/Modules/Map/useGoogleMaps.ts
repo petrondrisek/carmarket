@@ -1,34 +1,33 @@
-import { ref } from "vue";
+type Position = { lat: number, lng: number };
 
-export function useGoogleMaps(initialLat: number = 50.032, initialLng: number = 15.772, initialCity: string = 'Pardubice') {
+export function useGoogleMaps(
+    onUpdatePosition: (lat: number, lng: number) => void,
+    onUpdateCity: (city: string) => void
+) {
     let map: google.maps.Map | null = null;
     let marker: google.maps.marker.AdvancedMarkerElement | null = null;
     let circle: google.maps.Circle | null = null;
     let geocoder: google.maps.Geocoder | null = null;
 
-    const lat = ref<number>(initialLat);
-    const lng = ref<number>(initialLng);
-    const city = ref<string>(initialCity);
-
-    const initMap = async (htmlElement: HTMLElement, options: google.maps.MapOptions) => {
+    const initMap = async (htmlElement: HTMLElement, options: google.maps.MapOptions, position: Position) => {
         const { Map } = await google.maps.importLibrary('maps') as google.maps.MapsLibrary;
 
         map = new Map(htmlElement, {
-            center: { lat: lat.value, lng: lng.value },
+            center: { lat: position.lat, lng: position.lng },
             ...options
         });
 
         map.addListener('click', onMapClick);
     };
 
-    const initMarker = async () => {
+    const initMarker = async (position: Position) => {
         if(!map) throw new Error('Map must be initialized before creating marker');
 
         const { AdvancedMarkerElement } = await google.maps.importLibrary('marker') as google.maps.MarkerLibrary;
 
         marker = new AdvancedMarkerElement({
             map,
-            position: { lat: lat.value, lng: lng.value },
+            position: { lat: position.lat, lng: position.lng },
             gmpDraggable: true,
         });
 
@@ -51,67 +50,20 @@ export function useGoogleMaps(initialLat: number = 50.032, initialLng: number = 
             strokeColor: color
         });
     };
-    
-    const onMapClick = (e: google.maps.MapMouseEvent) => {
-        if (e.latLng){
-            updatePosition(e.latLng.lat(), e.latLng.lng());
-            updateCityByLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-        }
-    }
-
-    const onMapDrag = (e: any) => {
-        if (e.latLng.lat() && e.latLng.lng()){
-            updatePosition(e.latLng.lat(), e.latLng.lng());
-        }
-    }
-
-    const onMapDragEnd = (e: any) => {
-        if (e.latLng.lat() && e.latLng.lng()){
-            updatePosition(e.latLng.lat(), e.latLng.lng());
-            updateCityByLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-        }
-    }
 
     const updateMapTheme = (theme: 'LIGHT' | 'DARK') => {
-        if(map) map.setOptions({ colorScheme: theme });
+        // Future use, now it's not possible due to limitations of API.
+        // To work properly, the map needs to be reinitialized
+        if (map) {
+            map.setOptions({ 
+                colorScheme: theme
+            });
+        }
     }
-
-    const updatePosition = async (newLat: number, newLng: number) => {
-        lat.value = newLat;
-        lng.value = newLng;
-        
-        if(marker) {
-            marker.position = { lat: newLat, lng: newLng } as google.maps.LatLngLiteral;
-        }
-
-        if (marker && circle) {
-            const pos = marker.position!;
-            circle.setCenter(pos);
-        }
-    };
 
     const updateRadius = async (newRadius: number) => {
         if (circle) {
             circle.setRadius(newRadius * 1000);
-        }
-    };
-
-    const updateCityByLocation = async (location: google.maps.LatLngLiteral) => {
-        if (!geocoder) {
-            const { Geocoder } = await google.maps.importLibrary("geocoding") as google.maps.GeocodingLibrary;
-            geocoder = new Geocoder();
-        }
-
-        try {
-            const { results } = await geocoder.geocode({ location });
-            if (results && results[0]) {
-                const locality = results[0].address_components.find(c => c.types.includes('locality'));
-                const subLocality = results[0].address_components.find(c => c.types.includes('sublocality'));
-                
-                city.value = locality?.long_name || subLocality?.long_name || 'Neznámá lokalita';
-            }
-        } catch (e) {
-            console.error("Geocoding failed:", e);
         }
     };
 
@@ -137,14 +89,74 @@ export function useGoogleMaps(initialLat: number = 50.032, initialLng: number = 
         }
     };
 
+    const updatePositionWithoutEffect = async (newLat: number, newLng: number) => {
+        if(marker) {
+            marker.position = { lat: newLat, lng: newLng } as google.maps.LatLngLiteral;
+        }
+        
+        if (marker && circle) {
+            const pos = marker.position!;
+            circle.setCenter(pos);
+        }
+    }
+
+    // private
+    const onMapClick = (e: google.maps.MapMouseEvent) => {
+        if (e.latLng){
+            updatePosition(e.latLng.lat(), e.latLng.lng());
+            updateCityByLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+        }
+    }
+
+    const onMapDrag = (e: any) => {
+        if (e.latLng.lat() && e.latLng.lng()){
+            updatePosition(e.latLng.lat(), e.latLng.lng());
+        }
+    }
+
+    const onMapDragEnd = (e: any) => {
+        if (e.latLng.lat() && e.latLng.lng()){
+            updatePosition(e.latLng.lat(), e.latLng.lng());
+            updateCityByLocation({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+        }
+    }
+
+    const updatePosition = async (newLat: number, newLng: number) => {
+        if(marker) {
+            marker.position = { lat: newLat, lng: newLng } as google.maps.LatLngLiteral;
+        }
+        
+        if (marker && circle) {
+            const pos = marker.position!;
+            circle.setCenter(pos);
+        }
+        
+        onUpdatePosition(newLat, newLng);
+    };
+
+    const updateCityByLocation = async (location: google.maps.LatLngLiteral) => {
+        if (!geocoder) {
+            const { Geocoder } = await google.maps.importLibrary("geocoding") as google.maps.GeocodingLibrary;
+            geocoder = new Geocoder();
+        }
+
+        try {
+            const { results } = await geocoder.geocode({ location });
+            if (results && results[0]) {
+                const locality = results[0].address_components.find(c => c.types.includes('locality'));
+                const subLocality = results[0].address_components.find(c => c.types.includes('sublocality'));
+                
+                onUpdateCity(locality?.long_name || subLocality?.long_name || 'Neznámá lokalita');
+            }
+        } catch (e) {
+            console.error("Geocoding failed:", e);
+        }
+    };
+
     return {
-        lat,
-        lng,
-        city,
+        updatePositionWithoutEffect,
         updateMapTheme,
-        updatePosition,
         updateRadius,
-        updateCityByLocation,
         initMap,
         initMarker,
         initCircle,

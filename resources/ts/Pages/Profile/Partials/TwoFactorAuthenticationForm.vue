@@ -196,7 +196,7 @@ const disableTwoFactorAuthentication = () => {
             <div class="mt-5">
                 <div v-if="! twoFactorEnabled">
                     <ConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-                        <PrimaryButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
+                        <PrimaryButton type="submit" :class="{ 'opacity-25': enabling }" :disabled="enabling">
                             Enable
                         </PrimaryButton>
                     </ConfirmsPassword>
@@ -206,7 +206,7 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
                         <PrimaryButton
                             v-if="confirming"
-                            type="button"
+                            type="submit"
                             class="me-3"
                             :class="{ 'opacity-25': enabling || confirmationForm.processing }"
                             :disabled="enabling || confirmationForm.processing"
@@ -218,6 +218,7 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="regenerateRecoveryCodes">
                         <SecondaryButton
                             v-if="recoveryCodes.length > 0 && ! confirming"
+                            type="submit"
                             class="me-3"
                         >
                             Regenerate Recovery Codes
@@ -227,6 +228,7 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="showRecoveryCodes">
                         <SecondaryButton
                             v-if="recoveryCodes.length === 0 && ! confirming"
+                            type="submit"
                             class="me-3"
                         >
                             Show Recovery Codes
@@ -236,6 +238,7 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
                         <SecondaryButton
                             v-if="confirming"
+                            type="submit"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
                         >
@@ -246,9 +249,9 @@ const disableTwoFactorAuthentication = () => {
                     <ConfirmsPassword @confirmed="disableTwoFactorAuthentication">
                         <DangerButton
                             v-if="! confirming"
+                            type="button"
                             :class="{ 'opacity-25': disabling }"
                             :disabled="disabling"
-                            type="button"
                         >
                             Disable
                         </DangerButton>

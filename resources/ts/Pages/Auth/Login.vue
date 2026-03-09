@@ -2,16 +2,16 @@
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import AuthenticationCard from '@/Modules/JetStream/AuthenticationCard.vue';
-import Checkbox from '@/Modules/Inputs/Checkbox.vue';
 import InputError from '@/Modules/JetStream/Forms/InputError.vue';
 import InputLabel from '@/Modules/JetStream/Forms/InputLabel.vue';
-import PrimaryButton from '@/Modules/JetStream/Forms/PrimaryButton.vue';
-import LineInput from '@/Modules/Inputs/LineInput.vue';
+
 import Layout from '@/Layouts/Layout.vue';
+import { LineInput, Checkbox } from '@/Modules/Inputs';
+import { PrimaryButton } from '@/Shared/Components';
 
 const props = defineProps<{
     canResetPassword: boolean,
-    status: string,
+    status: string | null,
 }>();
 
 const form = useForm({
@@ -85,7 +85,7 @@ const submit = () => {
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton type="submit" class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </PrimaryButton>
             </div>

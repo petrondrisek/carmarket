@@ -8,16 +8,16 @@ import { LoadMorePagination } from '@/Modules/Pagination';
 import { Error } from '@/Shared/Components';
 import { PageProps } from '@/Shared/Types';
 import { useCarSearch } from './Search/useCarSearch';
-import { FiltersExtended, FiltersExtendedFree } from './Search/types';
+import { CarSearchForm } from './Search/types';
 
 const props = usePage<PageProps>()?.props;
 const cars = props?.cars?.data ?? [];
 
-const filters = ref<FiltersExtended>(props.queryParams ?? {} as FiltersExtended);
+const filters = ref<CarSearchForm>(props.queryParams ?? {});
 const filtersCount = computed(() => Object.keys(filters.value).length);
 
-const { mapToQuery } = useCarSearch({} as FiltersExtendedFree);
-const query = computed(() => mapToQuery(filters.value));
+const { mapToQuery } = useCarSearch(filters.value);
+const query = computed(() => mapToQuery());
 </script>
 
 <template>

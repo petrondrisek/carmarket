@@ -11,20 +11,23 @@ const { user, car } = defineProps<{
     user: User | null
     car: Car
 }>();
+
+const hasAccess = user !== null && (hasUserPermission(user, UserPermission.CAR) || user.email == car?.user.email);
+const hasAdminAccess = user !== null && hasUserPermission(user, UserPermission.CAR);
 </script>
 
 <template>
     <ActionPanel v-if="user">
-        <CarMarkAsSold :user="user" :car="car" />
+        <CarMarkAsSold :hasAccess="hasAccess" :car="car" />
 
         <PrimaryButton 
-            v-if="hasUserPermission(user, UserPermission.CAR)" 
+            v-if="hasAdminAccess" 
             as="button"
             @click="() => router.visit(route('app_car_edit', { car: car.id }))"
         >
             Edit car
         </PrimaryButton>
         
-        <CarDelete :user="user" :car="car" />
+        <CarDelete :hasAccess="hasAdminAccess" :car="car" />
     </ActionPanel>
 </template>

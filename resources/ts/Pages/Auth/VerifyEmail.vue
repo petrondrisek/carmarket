@@ -4,10 +4,11 @@ import { Head, Link, useForm } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import AuthenticationCard from '@/Modules/JetStream/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Modules/JetStream/AuthenticationCardLogo.vue';
-import PrimaryButton from '@/Modules/JetStream/Forms/PrimaryButton.vue';
+
+import { PrimaryButton } from '@/Shared/Components';
 
 const props = defineProps<{
-    status: string,
+    status: string | null,
 }>();
 
 const form = useForm({});
@@ -37,7 +38,7 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 
         <form @submit.prevent="submit">
             <div class="mt-4 flex items-center justify-between">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Resend Verification Email
                 </PrimaryButton>
 

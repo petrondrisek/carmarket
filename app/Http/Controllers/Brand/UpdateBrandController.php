@@ -19,7 +19,7 @@ final class UpdateBrandController
         $action->execute($brand, UpdateBrandDto::fromRequest($request));
 
         return redirect()
-                ->route('app_brand_manage')
+                ->route('app_brand_edit', ['brand' => $brand->id])
                 ->with('success', 'Brand updated successfully');
     }
 }

@@ -13,7 +13,9 @@ final class InertiaManageBrandsController
 {
     public function __invoke(GetBrandsRequest $request, ListBrandsQuery $query): Response
     {
-        $brands = $query->handle(GetBrandsDto::fromRequest($request));
+        $dto = GetBrandsDto::fromRequest($request);
+        $dto->onlyActive = false;
+        $brands = $query->handle($dto);
 
         return Inertia::render('Brand/Manage', [
             'brands' => BrandResource::collection($brands),

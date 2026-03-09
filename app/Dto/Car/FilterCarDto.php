@@ -17,6 +17,7 @@ readonly class FilterCarDto
         public ?int $maxPrice,
         public ?int $minYear,
         public ?int $maxYear,
+        public ?bool $wholeRepublic,
         public ?Location $location,
         public ?int $minKilometers,
         public ?int $maxKilometers,
@@ -37,6 +38,7 @@ readonly class FilterCarDto
                 : null;
         };
 
+        $wholeRepublic = (bool)($filters['whole_republic'] ?? false);
         return new self(
             brandIds: $filters['brand'] ?? null,
             
@@ -52,11 +54,14 @@ readonly class FilterCarDto
             minYear: $getRange('year', 0),
             maxYear: $getRange('year', 1),
             
-            location: isset($filters['location']) ? new Location(
-                lat: (float)($filters['location']['lat'] ?? 0),
-                lng: (float)($filters['location']['lng'] ?? 0),
-                radius: (int)($filters['location']['radius'] ?? 0)
-            ) : null,
+            wholeRepublic: $wholeRepublic,
+            location: isset($filters['location']) && !$wholeRepublic 
+                        ? new Location(
+                            lat: (float)($filters['location']['lat'] ?? 0),
+                            lng: (float)($filters['location']['lng'] ?? 0),
+                            radius: (int)($filters['location']['radius'] ?? 0)
+                          ) 
+                        : null,
             
             minKilometers: $getRange('kilometers', 0),
             maxKilometers: $getRange('kilometers', 1),
@@ -87,11 +92,14 @@ readonly class FilterCarDto
             'transmission' => $this->transmission?->value,
             'price' => ['min' => $this->minPrice, 'max' => $this->maxPrice],
             'year' => ['min' => $this->minYear, 'max' => $this->maxYear],
-            'location' => $this->location ? [
-                'lat' => $this->location->lat,
-                'lng' => $this->location->lng,
-                'radius' => $this->location->radius
-            ] : null,
+            'wholeRepublic' => $this->wholeRepublic,
+            'location' => $this->location && !$this->wholeRepublic 
+                          ? [
+                                'lat' => $this->location->lat,
+                                'lng' => $this->location->lng,
+                                'radius' => $this->location->radius
+                            ] 
+                          : null,
             'km' => ['min' => $this->minKilometers, 'max' => $this->maxKilometers],
             'engine' => is_array($engine) && !empty($engine) ? $engine[0] : null, // TODO: for now we don't support multiple engine (FE barrier) -> then just $engine
             'maxFuelConsumption' => $this->maxFuelConsumption,

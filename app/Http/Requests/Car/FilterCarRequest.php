@@ -31,6 +31,7 @@ class FilterCarRequest extends FormRequest
             'r'  => 'radius',
             's'  => 'state',
             'f'  => 'fuel_consumption',
+            'w'  => 'whole_republic',
             'lat'=> 'lat',
             'lng'=> 'lng',
         ];
@@ -47,13 +48,13 @@ class FilterCarRequest extends FormRequest
         }
 
         // Location
-        if (isset($filters['radius'], $filters['lat'], $filters['lng'])) {
+        if (isset($filters['radius'], $filters['lat'], $filters['lng']) && !$filters['whole_republic']) {
             $filters['location'] = [
                 'radius' => $filters['radius'],
                 'lat' => $filters['lat'],
                 'lng' => $filters['lng'],
             ];
-        } 
+        }
         
         unset($filters['radius'], $filters['lat'], $filters['lng']);
 
@@ -102,6 +103,8 @@ class FilterCarRequest extends FormRequest
             'filters.page' => ['nullable', 'numeric', 'min:1'],
             
             'filters.limit' => ['nullable', 'numeric', 'min:10'],
+
+            'filters.whole_republic' => ['nullable', 'boolean'],
         ];
     }
 }

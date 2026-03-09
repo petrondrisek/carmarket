@@ -2,7 +2,6 @@
 import { useForm, router } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import { useTemplateRef } from 'vue';
-import { hasUserPermission, UserPermission, User } from '@/Modules/JetStream';
 import { ToastMessageType } from '@/Modules/Toast/toast.models';
 import { useToast } from '@/Modules/Toast/useToast';
 import Modal from '@/Modules/Modal/Modal.vue';
@@ -10,9 +9,9 @@ import { PrimaryButton, SecondaryButton } from '@/Shared/Components';
 import { useProcessForm } from '@/Shared/Composables';
 import { Car } from './car.models';
 
-const { car, user } = defineProps<{
-    car: Car | null,
-    user: User | null
+const { car } = defineProps<{
+    hasAccess: boolean,
+    car: Car | null
 }>();
 
 const modalRef = useTemplateRef('modalRef');
@@ -25,7 +24,7 @@ const onSuccess = () => {
     if (!carToDelete) return;
 
     addToastMessage('Car deleted successfully', ToastMessageType.SUCCESS, 3000);
-    router.visit(route('app_car_list'));
+    router.visit(route('app_car_get'));
 
     modalRef.value?.close();
 }
@@ -39,7 +38,7 @@ const {
 
 <template>
     <PrimaryButton 
-        v-if="user && hasUserPermission(user, UserPermission.CAR)" 
+        v-if="hasAccess" 
         as="button" 
         @click="modalRef?.show()"
     >
@@ -47,7 +46,7 @@ const {
     </PrimaryButton>
     
     <Modal 
-        v-if="user && hasUserPermission(user, UserPermission.CAR)" 
+        v-if="hasAccess" 
         ref="modalRef"
     >
         <template #title>Delete car</template>

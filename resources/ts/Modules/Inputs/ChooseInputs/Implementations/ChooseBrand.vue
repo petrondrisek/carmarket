@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends number">
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { type Brand } from '@/Modules/Brand';
 import { useFetch } from '@/Shared/Composables';
 import { asset } from '@/Shared/Utils';
@@ -7,19 +7,31 @@ import ChooseInput from '../ChooseInput.vue';
 
 const { data: brands, error, loading } = useFetch<Brand[]>(`/api/brands?page=1&limit=30`, { method: 'GET' });
 
-const selectedBrand = defineModel<number | null>('selectedBrand', { default: null });
-const initialBrandIndex = computed(() => selectedBrand.value 
-    ? brands.value?.data?.findIndex(b => b.id === selectedBrand.value) 
-    : undefined
-);
+const [model, modifiers] = defineModel<number | string | null>({
+    set(value) {
+        if (modifiers.number) {
+            const num = Number(value);
+            return isNaN(num) ? null : num;
+        }
+        return value;
+    }
+});
+
+const initialBrandIndex = computed(() => {
+    const list = brands.value?.data;
+    if (!list || model.value === null) return 0;
+    
+    const index = list.findIndex(b => b.id === Number(model.value));
+    return index !== -1 ? index : 0;
+});
 </script>
 
 <template>
     <ChooseInput
-        v-if="!loading"
+        v-if="!loading && brands?.data?.length"
         :items="brands?.data || []"
         :initial-index="initialBrandIndex"
-        @selected="(item: Brand) => selectedBrand = item?.id"
+        @selected="(item: Brand) => model = item?.id"
     >
         <template #errors>
             <span v-if="loading">Loading...</span>

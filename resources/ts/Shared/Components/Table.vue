@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-    <table class="w-full border-2 border-gray-200 dark:border-gray-700">
+    <table v-bind="$attrs" class="w-full border-2 border-gray-200 dark:border-gray-700">
         <thead>
             <tr>
                 <th 

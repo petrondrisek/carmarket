@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useForm, Head } from '@inertiajs/vue3';
+import { useForm, Head, router } from '@inertiajs/vue3';
 import { Page } from '@inertiajs/core';
+import { route } from 'ziggy-js';
 import Layout from '@/Layouts/Layout.vue';
 import { useToast, ToastMessageType } from '@/Modules/Toast';
 import { PageProps } from '@/Shared/Types';
@@ -20,6 +21,7 @@ const { addToastMessage } = useToast();
 
 const onSuccess = (_: Page<PageProps>) => {
     addToastMessage('Brand added successfully.', ToastMessageType.SUCCESS, 3000);
+    router.visit(route('app_brand_manage'));
 }
 
 </script>

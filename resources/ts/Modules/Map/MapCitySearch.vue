@@ -1,48 +1,46 @@
 <script setup lang="ts">
-import { onMounted, ref, useTemplateRef, watch } from 'vue';
+import { ref, useTemplateRef } from 'vue';
+import { useFocus, watchDebounced } from '@vueuse/core';
 import LineInput from '@/Modules/Inputs/LineInput.vue';
 import { useClickOutside, useFetch } from '@/Shared/Composables';
 import { City } from './map.models';
 
-const city = defineModel<string>({ default: '' });
-const props = defineProps<{ initialCity?: string }>();
-const emit = defineEmits<{ (e: 'city-found', lat: number, lng: number): void }>();
+const lat = defineModel<number>('lat', { default: 50.032 });
+const lng = defineModel<number>('lng', { default: 15.779 });
+const city = defineModel<string>('city', { default: 'Pardubice' });
 
 const url = ref<string | null>(null);
 const { data: cities, error, loading } = useFetch<City[]>(url, {});
 
-watch(city, (newVal) => {
-    if (newVal.length < 3) {
-        url.value = null;
-        cities.value = null;
-        return;
-    }
-    
-    url.value = "/api/search/city?alias=" + encodeURIComponent(newVal);
-}, { flush: 'sync' }); // flush = to force immediate execution, right after city.value is reset (to prevent race conditions).
+const inputRef = useTemplateRef<HTMLInputElement>('inputRef');
+const { focused } = useFocus(inputRef);
 
-const setCityWithoutSearch = (name: string) => {
-    city.value = name;
-    url.value = null; 
+watchDebounced(city, 
+    (newVal: string) => {
+        if (!focused.value || !newVal || newVal.length < 3) {
+            url.value = null;
+            cities.value = null;
+            return;
+        }
+
+        execute(`/api/search/city?alias=${encodeURIComponent(newVal)}`);
+    }, 
+    { debounce: 300 }
+);
+
+const execute = (newUrl: string) => {
+    url.value = newUrl;
     cities.value = null;
 };
 
 const selectCity = (result: City) => {
     city.value = result.city; 
+    lng.value = result.lng;
+    lat.value = result.lat;
+
     url.value = null;
     cities.value = null;
-    emit('city-found', result.lat, result.lng);
 };
-
-defineExpose({
-    setCityWithoutSearch
-});
-
-onMounted(() => {
-    if (props.initialCity) {
-        setCityWithoutSearch(props.initialCity);
-    }
-});
 
 const citiesListRef = useTemplateRef('citiesListRef');
 useClickOutside([citiesListRef], () => cities.value = null);
@@ -51,6 +49,7 @@ useClickOutside([citiesListRef], () => cities.value = null);
 <template>
     <div class="relative w-full">
         <LineInput
+            ref="inputRef"
             v-bind="$attrs" 
             v-model="city"
             prefix="📍"
@@ -83,7 +82,7 @@ useClickOutside([citiesListRef], () => cities.value = null);
         </div>
         
         <div v-if="loading" class="absolute right-3 top-3">
-             <div class="animate-spin h-4 w-4 border-2 border-primary-500 border-t-transparent rounded-full"></div>
+             <div class="animate-spin h-4 w-4 border-2 border-primary-500 dark:border-dark_primary-400 border-t-transparent rounded-full"></div>
         </div>
     </div>
 </template>

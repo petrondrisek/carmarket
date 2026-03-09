@@ -2,6 +2,7 @@
 import { useTemplateRef, watch } from 'vue';
 import { useImageUpload } from './useImageUpload';
 import { asset } from '@/Shared/Utils';
+import { useDragAndDrop } from '@/Shared/Composables';
 
 interface Props {
     maxImages?: number;
@@ -14,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const model = defineModel<File[]>();
-const { localFiles, isDragging, addFiles, removeFile } = useImageUpload(props.maxImages);
+const { localFiles, addFiles, removeFile } = useImageUpload(props.maxImages);
 const inputRef = useTemplateRef('inputRef');
 
 const handleRemove = (e: Event, index: number) => {
@@ -22,13 +23,12 @@ const handleRemove = (e: Event, index: number) => {
     removeFile(index);
 }
 
-const onDrop = (e: DragEvent) => {
-    isDragging.value = false;
-
+const onDropEvent = (e: DragEvent) => {
     if(!e.dataTransfer?.files) return;
-
     addFiles(e.dataTransfer?.files);
 }
+
+const { isDragging, onDragEnter, onDragLeave, onDrop } = useDragAndDrop(onDropEvent);
 
 watch(() => localFiles, () => {
     model.value = localFiles.value.map(f => f.file);
@@ -40,8 +40,8 @@ const emit = defineEmits(['remove-existing-image']);
 <template>
     <div
         @dragover.prevent
-        @dragenter.prevent="isDragging = true"
-        @dragleave.prevent="isDragging = false"
+        @dragenter.prevent="onDragEnter"
+        @dragleave.prevent="onDragLeave"
         @drop.prevent="onDrop"
         @click.prevent="inputRef?.click()"
     >

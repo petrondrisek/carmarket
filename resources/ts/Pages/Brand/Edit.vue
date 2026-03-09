@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Page } from '@inertiajs/core';
-import { Head, usePage, useForm } from '@inertiajs/vue3';
+import { Head, usePage, useForm, router } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import Layout from '@/Layouts/Layout.vue';
 import { useToast, ToastMessageType } from '@/Modules/Toast';
 import { asset } from '@/Shared/Utils';
@@ -9,20 +10,21 @@ import { Form } from './Form';
 import { BrandForm } from './types';
 
 const page = usePage<PageProps>();
-const { brand } = page.props;
+const brand = page.props.brand.data;
 
 const form = useForm<BrandForm>({
     _method: 'POST',
-    name: brand.value?.name ?? '',
+    name: brand.name ?? '',
     logo: [],
-    description: brand.value?.description ?? '',
-    is_active: !!brand.value?.is_active,
+    description: brand.description ?? '',
+    is_active: !!brand.is_active,
 });
 
 const { addToastMessage } = useToast();
 
 const onSuccess = (_: Page<PageProps>) => {
     addToastMessage('Brand edited successfully.', ToastMessageType.SUCCESS, 3000);
+    router.visit(route('app_brand_manage'));
 };
 </script>
 

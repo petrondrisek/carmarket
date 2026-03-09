@@ -12,7 +12,7 @@ final class RegisterBrandController
         $action->execute(RegisterBrandDto::fromRequest($request));
         
         return redirect()
-                ->route('app_brand_manage')
+                ->route('app_brand_add')
                 ->with('success', 'Brand added successfully');
     }
 }

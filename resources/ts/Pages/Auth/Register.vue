@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
-import Layout from '@/Layouts/Layout.vue';
 import AuthenticationCard from '@/Modules/JetStream/AuthenticationCard.vue';
-import Checkbox from '@/Modules/Inputs/Checkbox.vue';
 import InputError from '@/Modules/JetStream/Forms/InputError.vue';
 import InputLabel from '@/Modules/JetStream/Forms/InputLabel.vue';
-import PrimaryButton from '@/Modules/JetStream/Forms/PrimaryButton.vue';
-import LineInput from '@/Modules/Inputs/LineInput.vue';
-import { PageProps } from '@/Shared/Types/PageProps';
+
+import Layout from '@/Layouts/Layout.vue';
+import { LineInput, Checkbox } from '@/Modules/Inputs';
+import { PrimaryButton } from '@/Shared/Components';
+import { PageProps } from '@/Shared/Types';
 
 const page = usePage<PageProps>();
 
@@ -112,7 +112,7 @@ const submit = () => {
                     Already registered?
                 </Link>
 
-                <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton type="submit" class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Register
                 </PrimaryButton>
             </div>

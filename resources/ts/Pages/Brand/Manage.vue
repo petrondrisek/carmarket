@@ -10,7 +10,7 @@ import { ActionPanel, Table, TableTd, PrimaryButton } from '@/Shared/Components'
 
 // Get
 const page = usePage<PageProps>();
-const brands = page.props.brands?.data ?? [];
+const brands = ref<Brand[]>(page.props.brands?.data ?? []);
 
 // Delete
 const deleteRef = useTemplateRef('deleteRef');
@@ -20,6 +20,10 @@ const requestDelete = (brand: Brand) => {
     selectedBrand.value = brand;
     deleteRef.value?.process();
 };
+
+const onDelete = (brand: Brand) => {
+    
+}
 </script>
 
 <template>

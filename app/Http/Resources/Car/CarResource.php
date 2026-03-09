@@ -37,6 +37,7 @@ class CarResource extends JsonResource
                 'lng' => (float)$this->location_lng,
             ],
             'is_new' => $this->created_at->diffInDays() < 7,
+            'is_sold' => $this->is_sold
         ];
     }
 }

@@ -10,15 +10,21 @@ final class ListBrandsQuery
 {
     public function handle(GetBrandsDto $dto): LengthAwarePaginator
     {
-        return Brand::query()
+        $query = Brand::query()
             ->with(['images.image'])
             ->withCount('cars')
             ->when($dto->search, 
                 fn ($q, $s) => $q->where('name', 'like', "%{$s}%")
-            )
-            ->where('is_active', $dto->onlyActive)
-            ->orderBy('created_at', 'desc')
-            ->paginate($dto->perPage)
-            ->withQueryString();
+            );
+            
+        if($dto->onlyActive) {
+            $query = $query->where('is_active', $dto->onlyActive);
+        }
+
+        $query = $query->orderBy('created_at', 'desc')
+                        ->paginate($dto->perPage)
+                        ->withQueryString();
+
+        return $query;
     }
 }

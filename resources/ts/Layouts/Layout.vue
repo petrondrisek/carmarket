@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { route } from 'ziggy-js';
 import { ThemeSwitcher} from '@/Modules/Theme';
 import { provideToast, ToastMessages } from '@/Modules/Toast';

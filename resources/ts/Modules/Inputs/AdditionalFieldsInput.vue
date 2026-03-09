@@ -10,7 +10,7 @@ const model = defineModel<Record<string, string>>({
 const addFieldName = ref<string>('');
 
 const hasFields = computed(
-  () => Object.keys(model.value).length === 0
+  () => Object.keys(model.value).length > 0
 );
 
 const addField = (e?: Event) => {

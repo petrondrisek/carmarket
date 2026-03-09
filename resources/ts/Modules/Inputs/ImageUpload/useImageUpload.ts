@@ -7,7 +7,6 @@ interface LocalFile {
 
 export function useImageUpload(maxImages: number = 5) {
     const localFiles = ref<LocalFile[]>([]);
-    const isDragging = ref(false);
 
     const addFiles = (files: FileList | null) => {
         if (!files) return;
@@ -46,7 +45,6 @@ export function useImageUpload(maxImages: number = 5) {
 
     return {
         localFiles,
-        isDragging,
         addFiles,
         removeFile
     };

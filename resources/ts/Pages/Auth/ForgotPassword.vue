@@ -4,12 +4,13 @@ import { route } from 'ziggy-js';
 import AuthenticationCard from '@/Modules/JetStream/AuthenticationCard.vue';
 import InputError from '@/Modules/JetStream/Forms/InputError.vue';
 import InputLabel from '@/Modules/JetStream/Forms/InputLabel.vue';
-import PrimaryButton from '@/Modules/JetStream/Forms/PrimaryButton.vue';
-import LineInput from '@/Modules/Inputs/LineInput.vue';
+
 import Layout from '@/Layouts/Layout.vue';
+import { LineInput } from '@/Modules/Inputs';
+import { PrimaryButton } from '@/Shared/Components';
 
 const props = defineProps<{
-    status: string,
+    status: string | null,
 }>();
 
 const form = useForm({
@@ -54,7 +55,7 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Email Password Reset Link
                 </PrimaryButton>
             </div>

@@ -15,7 +15,7 @@ const description = useSafeHtml(car.description);
 <template>
     <SubTitle>Detail info</SubTitle>
     
-    <Table :headers="[]">
+    <Table class="detail-info" :headers="[]">
         <CarDetailTableRow header="Location">
             {{ car.location.city }} (Lat: {{ car.location.lat }}, Long: {{ car.location.lng }})
         </CarDetailTableRow>
@@ -83,7 +83,7 @@ const description = useSafeHtml(car.description);
     </Table>
 
 
-    <SubTitle>Description</SubTitle>
+    <SubTitle class="detail-info-text">Description</SubTitle>
     <p  
         class="mt-2" 
         v-html="description"

@@ -25,12 +25,15 @@ const dynamicPadding = computed(() => {
 });
 
 onMounted(() => {
-    if (inputRef.value && (inputRef.value.hasAttribute('autofocus') || (inputRef.value as HTMLInputElement).autofocus)) {
+    if (inputRef.value?.autofocus) {
         inputRef.value.focus();
     }
 });
 
-defineExpose({ focus: () => inputRef.value?.focus() });
+defineExpose({ 
+    $el: inputRef, 
+    focus: () => inputRef.value?.focus()
+ });
 </script>
 
 <template>

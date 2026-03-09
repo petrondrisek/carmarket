@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, usePage, useForm } from '@inertiajs/vue3';
+import { Head, usePage, useForm, router } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import Layout from '@/Layouts/Layout.vue';
 import { useToast, ToastMessageType } from '@/Modules/Toast';
 import { PageProps } from '@/Shared/Types';
@@ -11,30 +12,31 @@ const car = page.props.car?.data ?? null;
 
 const form = useForm<CarForm>({
     _method: 'POST',
-    brand_id: car.value.brand?.id ?? 0,
-    model: car.value.model ?? '',
-    color: car.value.color ?? '',
-    kilometers: car.value.kilometers,
+    brand_id: car.brand?.id ?? 0,
+    model: car.model ?? '',
+    color: car.color ?? '',
+    kilometers: car.kilometers,
     location: {
-        city: car.value.location.city ?? 'Pardubice', 
-        lat: car.value.location.lat ?? 50.0158, 
-        lng: car.value.location.lng ?? 15.7402
+        city: car.location.city ?? 'Pardubice', 
+        lat: car.location.lat ?? 50.0158, 
+        lng: car.location.lng ?? 15.7402
     },
-    price: car.value.price,
-    engine: car.value.engine ?? 'diesel',
-    state: car.value.state ?? 'new',
-    transmission: car.value.transmission ?? 'manual',
-    year: car.value.year ?? new Date().getFullYear().toString(),
-    images: car.value.images ?? [],
-    other_features: car.value.other_features ?? {},
-    description: car.value.description ?? 'Bez popisu',
-    fuel_consumption: car.value.fuel_consumption,
+    price: car.price,
+    engine: car.engine ?? 'diesel',
+    state: car.state ?? 'new',
+    transmission: car.transmission ?? 'manual',
+    year: car.year ?? new Date().getFullYear().toString(),
+    images: car.images ?? [],
+    other_features: car.other_features ?? {},
+    description: car.description ?? 'Bez popisu',
+    fuel_consumption: car.fuel_consumption,
     images_to_upload: [],
     images_to_delete: []
 })
 const { addToastMessage } = useToast();
 
 const onSuccess = () => {
+    router.visit(route('app_car_show', { car: car.id }));
     addToastMessage('Car edit successfully', ToastMessageType.SUCCESS, 3000);
 }
 </script>

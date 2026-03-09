@@ -16,7 +16,7 @@ final class UpdateCarController
         $car = $action->execute($car, UpdateCarDto::fromRequest($request));
 
         return redirect()
-                ->route('app_car_get')
+                ->route('app_car_edit', ['car' => $car->id])
                 ->with('success', 'Car updated successfully');
     }
 }

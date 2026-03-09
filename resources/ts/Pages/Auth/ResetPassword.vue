@@ -5,8 +5,9 @@ import AuthenticationCard from '@/Modules/JetStream/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Modules/JetStream/AuthenticationCardLogo.vue';
 import InputError from '@/Modules/JetStream/Forms/InputError.vue';
 import InputLabel from '@/Modules/JetStream/Forms/InputLabel.vue';
-import PrimaryButton from '@/Modules/JetStream/Forms/PrimaryButton.vue';
-import LineInput from '@/Modules/Inputs/LineInput.vue';
+
+import { LineInput } from '@/Modules/Inputs';
+import { PrimaryButton } from '@/Shared/Components';
 
 const props = defineProps<{
     email: string,
@@ -82,7 +83,7 @@ const submit = () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <PrimaryButton type="submit" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Reset Password
                 </PrimaryButton>
             </div>

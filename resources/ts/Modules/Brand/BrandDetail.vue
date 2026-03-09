@@ -9,7 +9,7 @@ const { brand } = defineProps<{
 </script>
 
 <template>
-    <SubTitle>About the brand {{ brand.name ?? 'Unknown brand' }}</SubTitle>
+    <SubTitle class="detail-info-brand">About the brand {{ brand.name ?? 'Unknown brand' }}</SubTitle>
     
     <div class="grid grid-cols-4 gap-4">
         <img 

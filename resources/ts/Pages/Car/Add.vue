@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
+import { route } from 'ziggy-js';
 import Layout from '@/Layouts/Layout.vue';
 import { useToast, ToastMessageType } from '@/Modules/Toast';
 import { CarEngineType, CarStateType, CarTransmissionType } from '@/Modules/Car';
@@ -29,6 +30,7 @@ const form = useForm<CarForm>({
 const { addToastMessage } = useToast();
 
 const onSuccess = () => {
+    router.visit(route('app_car_get'));
     addToastMessage('Car added successfully.', ToastMessageType.SUCCESS, 3000);
 }
 </script>

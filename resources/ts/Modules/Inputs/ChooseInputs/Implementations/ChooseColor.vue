@@ -34,15 +34,15 @@ const items: Item[] = [
     {label: "Charcoal", value: "#36454F"}
 ];
 
-const selectedColor = defineModel<string | null>('selectedColor', { default: null });
-const initialColorIndex = items.findIndex(item => item.value === selectedColor.value);
+const [model] = defineModel<string | null>({ default: null });
+const initialColorIndex = items.findIndex(item => item.value === model.value);
 </script>
 
 <template>
     <ChooseInput
         :items="items || []"
         :initial-index="initialColorIndex"
-        @selected="(item: Item) => selectedColor = item.value"
+        @selected="(item: Item) => model = item.value"
     >
         <template #option="{ item }: { item: Item | null }">
             <span 

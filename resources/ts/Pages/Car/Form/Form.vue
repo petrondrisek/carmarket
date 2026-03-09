@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useTemplateRef } from 'vue';
 import { Page } from '@inertiajs/core';
 import { PageProps } from '@/Shared/Types';
 import { PrimaryButton, Error } from '@/Shared/Components';
@@ -33,14 +32,11 @@ const emit = defineEmits<{
     (e: 'success', page: Page<PageProps>): void
 }>();
 
-const mapCitySearchRef = useTemplateRef('mapCitySearchRef');
-const mapRef = useTemplateRef('mapRef');
-
 defineExpose({
     form: props.form
 });
 
-const { form, error, processing, removeFile, submit } = useCarForm(props, mapRef, emit);
+const { form, error, processing, removeFile, submit } = useCarForm(props, emit);
 </script>
 
 <template>
@@ -56,7 +52,7 @@ const { form, error, processing, removeFile, submit } = useCarForm(props, mapRef
         <template #content>
             <div class="mb-2">
                 <InputLabel for="brand" value="Brand" />
-                <ChooseBrand v-model:selected-brand="form.brand_id" name="brand" />
+                <ChooseBrand v-model.number="form.brand_id" name="brand" />
             </div>
 
             <div class="mb-2">
@@ -74,18 +70,16 @@ const { form, error, processing, removeFile, submit } = useCarForm(props, mapRef
             <div class="mb-2">
                 <InputLabel for="city" value="City" />
                 <MapCitySearch
-                    ref="mapCitySearchRef"
-                    :initial-city="form.location.city"
-                    @city-found="(lat: number, lng: number) => mapRef?.updatePosition(lat, lng)"
+                    v-model:lat="form.location.lat"
+                    v-model:lng="form.location.lng"
+                    v-model:city="form.location.city"
                 />
 
                 <Map
-                    ref="mapRef" 
-                    :radius="form.radius || 10" 
-                    :initial-lat="form.location.lat" 
-                    :initial-lng="form.location.lng"
-                    :initial-city="form.location.city"
-                    @updated-location="(city) => mapCitySearchRef?.setCityWithoutSearch(city)" 
+                    v-model:radius.number="form.radius"
+                    v-model:lat="form.location.lat"
+                    v-model:lng="form.location.lng"
+                    v-model:city="form.location.city"
                 />
             </div>
 
@@ -108,7 +102,7 @@ const { form, error, processing, removeFile, submit } = useCarForm(props, mapRef
         <template #content>
             <div class="mb-2">
                 <InputLabel for="color" value="Car paint color" />
-                <ChooseColor v-model:selected-color="form.color" name="color" />
+                <ChooseColor v-model="form.color" name="color" />
             </div>
 
             <div class="mb-2">
@@ -178,7 +172,7 @@ const { form, error, processing, removeFile, submit } = useCarForm(props, mapRef
             <div class="mb-2">
                 <InputLabel for="images" value="Images" />
                 <ImageInput 
-                    v-model="form.images_upload" 
+                    v-model="form.images_to_upload" 
                     :already-uploaded="form.images" 
                     :max-images="6"
                     @remove-existing-image="removeFile"
