@@ -5,3 +5,4 @@ export * from './useFetch';
 export * from './useLocalStorage';
 export * from './useProcessForm';
 export * from './useDragAndDrop';
+export * from './useEnv';

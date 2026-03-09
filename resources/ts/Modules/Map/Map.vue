@@ -2,12 +2,14 @@
 import { onMounted, onUnmounted, useTemplateRef, watch } from 'vue';
 import { useGoogleMaps } from './useGoogleMaps';
 import { useTheme, Theme } from '@/Modules/Theme';
+import { useEnv } from '@/Shared/Composables';
 
 const lat = defineModel<number>('lat', { default: 50.032 });
 const lng = defineModel<number>('lng', { default: 15.779 });
 const city = defineModel<string>('city', { default: 'Pardubice' });
 const radius = defineModel<number>('radius', { default: 10 });
 
+const { VITE_GOOGLE_MAPS_MAP_ID } = useEnv();
 const mapRef = useTemplateRef('mapRef');
 const { 
     updateMapTheme,
@@ -45,7 +47,7 @@ onMounted(async () => {
             {
                 center: { lat: lat.value, lng: lng.value },
                 zoom: 7,
-                mapId: "6e6e8cdb4240be66513b73ab",
+                mapId: VITE_GOOGLE_MAPS_MAP_ID,
                 clickableIcons: false,
                 colorScheme: theme.value === Theme.Dark ? 'DARK' : 'LIGHT'
             }, 
